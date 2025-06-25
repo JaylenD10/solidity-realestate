@@ -21,7 +21,7 @@ const Home = ({ home, provider, escrow, togglePop, account }) => {
     const hasBought = await escrow.approval(home.id, buyer);
     setHasBought(hasBought);
 
-    const seller = await escrow.seller(home.id);
+    const seller = await escrow.seller();
     setSeller(seller);
     const hasSold = await escrow.approval(home.id, seller);
     setHasSold(hasSold);
@@ -43,6 +43,11 @@ const Home = ({ home, provider, escrow, togglePop, account }) => {
     const owner = await escrow.buyer(home.id);
     setOwner(owner);
   };
+
+  const buyHandler = async () => {};
+  const inspectHandler = async () => {};
+  const lendHandler = async () => {};
+  const sellHandler = async () => {};
 
   useEffect(() => {
     fetchDetails();
@@ -73,13 +78,37 @@ const Home = ({ home, provider, escrow, togglePop, account }) => {
           ) : (
             <div>
               {account === inspector ? (
-                <button className="home__buy">Approve Inspection</button>
+                <button
+                  className="home__buy"
+                  onClick={inspectHandler}
+                  disabled={hasInspected}
+                >
+                  Approve Inspection
+                </button>
               ) : account === lender ? (
-                <button className="home__buy">Approve & Lend</button>
+                <button
+                  className="home__buy"
+                  onClick={lendHandler}
+                  disabled={hasLended}
+                >
+                  Approve & Lend
+                </button>
               ) : account === seller ? (
-                <button className="home__buy">Approve & Sell</button>
+                <button
+                  className="home__buy"
+                  onClick={sellHandler}
+                  disabled={hasSold}
+                >
+                  Approve & Sell
+                </button>
               ) : (
-                <button className="home__buy">Buy</button>
+                <button
+                  className="home__buy"
+                  onClick={buyHandler}
+                  disabled={hasBought}
+                >
+                  Buy
+                </button>
               )}
               <div>
                 <button className="home__buy">Contact Agent</button>
