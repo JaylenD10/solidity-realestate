@@ -120,7 +120,8 @@ const Home = ({ home, provider, escrow, togglePop, account }) => {
           <p>
             <strong>{home.attributes[2].value}</strong> bds |
             <strong>{home.attributes[3].value}</strong> ba |
-            <strong>{home.attributes[4].value}</strong> sqft
+            <strong>{home.attributes[4].value}</strong> sqft |
+            <strong>{home.attributes[5].value}</strong> yr
           </p>
           <p>{home.address}</p>
           <h2>{home.attributes[0].value} ETH</h2>

@@ -20,14 +20,12 @@ function App() {
   const [homes, setHomes] = useState([]);
   const [home, setHome] = useState({});
   const [toggle, setToggle] = useState(false);
+  const [query, setQuery] = useState('');
 
   const loadBlockchainData = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     setProvider(provider);
     const network = await provider.getNetwork();
-
-    console.log('Chain ID:', network.chainId);
-    console.log('Config entry:', config[network.chainId]);
 
     const realEstate = new ethers.Contract(
       config[network.chainId].realEstate.address,
@@ -70,15 +68,23 @@ function App() {
     toggle ? setToggle(false) : setToggle(true);
   };
 
+  const filteredHomes = homes.filter((home) => {
+    const address = home.address.toLowerCase();
+    const q = query.toLowerCase();
+
+    return address.includes(q);
+  });
+
   return (
     <div>
       <Navigation account={account} setAccount={setAccount} />
-      <Search />
+      <Search query={query} setQuery={setQuery} />
+
       <div className="cards__section">
         <h3>Homes with Solidity!</h3>
         <hr />
         <div className="cards">
-          {homes.map((home, index) => (
+          {(query ? filteredHomes : homes).map((home, index) => (
             <div className="card" key={index} onClick={() => togglePop(home)}>
               <div className="card__image">
                 <img src={home.image} alt="Home" />
@@ -88,7 +94,8 @@ function App() {
                 <p>
                   <strong>{home.attributes[2].value}</strong> bds |
                   <strong>{home.attributes[3].value}</strong> ba |
-                  <strong>{home.attributes[4].value}</strong> sqft
+                  <strong>{home.attributes[4].value}</strong> sqft |
+                  <strong>{home.attributes[5].value}</strong> yr
                 </p>
                 <p>{home.address}</p>
               </div>
@@ -96,6 +103,7 @@ function App() {
           ))}
         </div>
       </div>
+
       {toggle && (
         <Home
           home={home}
